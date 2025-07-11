@@ -41,12 +41,12 @@ private JournalEntryService journalService;
         journalService.deleteById(myId);
         return true;
    }
-    @PutMapping("/uid/{userId}")
-    public JournalEntry updateJournalById(@PathVariable ObjectId id,@RequestBody JournalEntry newEntry){
-      JournalEntry old = journalService.getById(id).orElse(null);
+    @PutMapping("uid/{userId}")
+    public JournalEntry updateJournalById(@PathVariable ObjectId userId,@RequestBody JournalEntry newEntry){
+      JournalEntry old = journalService.getById(userId).orElse(null);
       if (old != null){
-          old.setTitle(newEntry.getTitle() != null && newEntry.getTitle().equals("") ? newEntry.getTitle(): old.getTitle());
-          old.setContent(newEntry.getContent() != null && newEntry.getContent().equals("")? newEntry.getContent(): old.getContent());
+          old.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().equals("") ? newEntry.getTitle(): old.getTitle());
+          old.setContent(newEntry.getContent() != null && !newEntry.getContent().equals("")? newEntry.getContent(): old.getContent());
       }
       journalService.saveEntry(old);
       return old;
