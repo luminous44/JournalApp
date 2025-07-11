@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collation = "journal_entries")
+@Document
 public class JournalEntry {
     @Id
     private String id;

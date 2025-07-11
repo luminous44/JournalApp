@@ -19,8 +19,7 @@ private JournalEntryService journalService;
 
     @GetMapping
     public List<JournalEntry> getAll(){
-
-        return null;
+        return journalService.getAll();
     }
     @PostMapping
     public boolean create(@RequestBody JournalEntry contentEntry){
