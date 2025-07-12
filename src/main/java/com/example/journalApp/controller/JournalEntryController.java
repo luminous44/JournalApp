@@ -4,12 +4,12 @@ import com.example.journalApp.Entity.JournalEntry;
 import com.example.journalApp.services.JournalEntryService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/journalMap")
@@ -32,8 +32,15 @@ private JournalEntryService journalService;
     }
 
     @GetMapping("id/{myId}")
-    public JournalEntry getUserById(@PathVariable ObjectId myId){
-        return journalService.getById(myId).orElse(null);
+    public ResponseEntity<JournalEntry> getUserById(@PathVariable ObjectId myId){
+         Optional<JournalEntry> entry = journalService.getById(myId);
+         if (entry.isPresent()){
+             return  new ResponseEntity<>(entry.get(), HttpStatus.OK);
+         }
+
+         return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+
+
     }
 
    @DeleteMapping("id/{myId}")
