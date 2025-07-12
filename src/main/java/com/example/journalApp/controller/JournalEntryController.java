@@ -4,12 +4,15 @@ import com.example.journalApp.Entity.JournalEntry;
 import com.example.journalApp.services.JournalEntryService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/journalMap")
@@ -24,16 +27,29 @@ private JournalEntryService journalService;
         return journalService.getAll();
     }
     @PostMapping
-    public JournalEntry create(@RequestBody JournalEntry contentEntry){
-        contentEntry.setDate(LocalDateTime.now());
-        journalService.saveEntry(contentEntry);
-        return contentEntry;
+    public  ResponseEntity<JournalEntry> create(@RequestBody JournalEntry contentEntry){
+
+        try {
+            contentEntry.setDate(LocalDateTime.now());
+            journalService.saveEntry(contentEntry);
+            return new ResponseEntity<>(contentEntry, HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
 
     }
 
     @GetMapping("id/{myId}")
-    public JournalEntry getUserById(@PathVariable ObjectId myId){
-        return journalService.getById(myId).orElse(null);
+    public ResponseEntity<JournalEntry> getUserById(@PathVariable ObjectId myId){
+        Optional<JournalEntry> jEntry = journalService.getById(myId);
+
+        if (jEntry.isPresent()){
+            return new ResponseEntity<>(jEntry.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
    @DeleteMapping("id/{myId}")
