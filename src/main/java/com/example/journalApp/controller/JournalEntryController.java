@@ -53,9 +53,9 @@ private JournalEntryService journalService;
     }
 
    @DeleteMapping("id/{myId}")
-   public boolean deleteUserById(@PathVariable ObjectId myId){
+   public ResponseEntity<?> deleteUserById(@PathVariable ObjectId myId){
         journalService.deleteById(myId);
-        return true;
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
    }
     @PutMapping("uid/{userId}")
     public JournalEntry updateJournalById(@PathVariable ObjectId userId,@RequestBody JournalEntry newEntry){
