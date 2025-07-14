@@ -22,16 +22,14 @@ public class JournalEntryService {
 
     @Transactional
     public void saveEntry(JournalEntry journalEntry,String userName){
-       try {
+
            User user = userService.findByUserName(userName);
            journalEntry.setDate(LocalDateTime.now());
            JournalEntry saveEntry = journalRepo.save(journalEntry);
            user.getEntries().add(saveEntry);
            user.setUserName(null);
            userService.saveUser(user);
-       }catch (Exception e){
-           e.printStackTrace();
-       }
+
 
     }
     public void saveEntry(JournalEntry journalEntry){
