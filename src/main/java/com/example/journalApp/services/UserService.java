@@ -13,7 +13,7 @@ public class UserService {
     @Autowired
     private userRepo userRepo;
 
-    public void saveEntry(User user){
+    public void saveUser(User user){
         userRepo.save(user);
 
     }
@@ -27,5 +27,8 @@ public class UserService {
 
     public void deleteById(ObjectId id){
         userRepo.deleteById(String.valueOf(id));
+    }
+    public  User findByUserName(String userName){
+        return userRepo.findByuserName(userName);
     }
 }
