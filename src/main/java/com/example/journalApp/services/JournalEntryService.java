@@ -27,6 +27,9 @@ public class JournalEntryService {
         userService.saveUser(user);
 
     }
+    public void saveEntry(JournalEntry journalEntry){
+        journalRepo.save(journalEntry);
+    }
 
     public List<JournalEntry> getAll(){
         return journalRepo.findAll();
@@ -37,7 +40,11 @@ public class JournalEntryService {
 
     public void deleteById(ObjectId id,String userName){
         User user = userService.findByUserName(userName);
-        journalRepo.deleteById(String.valueOf(id));
+        if (user == null) {
+            throw new RuntimeException("User not found with username: " + userName);
+        }
         user.getEntries().removeIf(x-> x.getId().equals(id));
+        userService.saveUser(user);
+        journalRepo.deleteById(String.valueOf(id));
     }
 }

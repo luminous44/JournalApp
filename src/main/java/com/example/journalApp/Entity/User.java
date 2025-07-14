@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "Users")
+@Document(collection = "users")
 @Data
 public class User {
 
