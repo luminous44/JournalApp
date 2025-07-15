@@ -5,6 +5,8 @@ import com.example.journalApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +17,16 @@ public class UserDetailsController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/{uerName}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable String uerName){
-
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String uerName = authentication.getName();
         User userDb = userService.findByUserName(uerName);
-        if (userDb.getUserName() != null){
+        if (userDb.getUserName() != null) {
             userDb.setUserName(user.getUserName());
             userDb.setPassword(user.getPassword());
             userService.saveUser(userDb);
+            return new ResponseEntity<>(userDb,HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
