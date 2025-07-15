@@ -15,15 +15,6 @@ public class UserDetailsController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<User> getAllUse(){
-        return userService.getAll();
-    }
-    @PostMapping
-    public boolean createUser(@RequestBody User user){
-        userService.saveUser(user);
-        return true;
-    }
     @PutMapping("/{uerName}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable String uerName){
 
