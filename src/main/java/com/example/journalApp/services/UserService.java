@@ -19,7 +19,7 @@ public class UserService {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     public void saveNewUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("user"));
+        user.setRoles(Arrays.asList("USER"));
         userRepo.save(user);
 
     }
@@ -40,5 +40,12 @@ public class UserService {
     }
     public  User findByUserName(String userName){
         return userRepo.findByuserName(userName);
+    }
+
+    public boolean saveAdmin(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("ADMIN"));
+        userRepo.save(user);
+        return  true;
     }
 }
