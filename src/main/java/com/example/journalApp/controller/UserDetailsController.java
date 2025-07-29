@@ -20,8 +20,8 @@ public class UserDetailsController {
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String uerName = authentication.getName();
-        User userDb = userService.findByUserName(uerName);
+        String userName = authentication.getName();
+        User userDb = userService.findByUserName(userName);
         if (userDb.getUserName() != null) {
             userDb.setUserName(user.getUserName());
             userDb.setPassword(user.getPassword());

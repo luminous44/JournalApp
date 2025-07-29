@@ -41,14 +41,20 @@ public class JournalEntryService {
     public Optional<JournalEntry> getById(ObjectId id){
         return journalRepo.findById(String.valueOf(id));
     }
-
-    public void deleteById(ObjectId id,String userName){
+    @Transactional
+    public boolean deleteById(ObjectId id,String userName){
         User user = userService.findByUserName(userName);
-        if (user == null) {
-            throw new RuntimeException("User not found with username: " + userName);
+        boolean remove = false;
+        if (user != null) {
+            remove = user.getEntries().removeIf(x-> x.getId().equals(id));
+            if (remove){
+                userService.saveUser(user);
+                journalRepo.deleteById(String.valueOf(id));
+            }
+            return remove;
         }
-        user.getEntries().removeIf(x-> x.getId().equals(id));
-        userService.saveUser(user);
-        journalRepo.deleteById(String.valueOf(id));
+
+        return remove;
+
     }
 }
